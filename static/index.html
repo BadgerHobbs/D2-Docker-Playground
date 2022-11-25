@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D2 Playground</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src='https://unpkg.com/panzoom@9.4.0/dist/panzoom.min.js'></script>
+
+    <style>
+        textarea {
+            border: none;
+            overflow: auto;
+            outline: none;
+
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+
+            resize: none;
+            /*remove the resize handle on the bottom right*/
+        }
+
+        /* Background Removal
+        svg {
+            background: rgb(55 65 81) !important;
+        }
+        */
+    </style>
+
+</head>
+
+<body class="bg-gray-900 h-screen flex">
+
+    <div class="h-full w-1/3 p-3">
+        <div class="bg-gray-800 h-full w-full drop-shadow-xl p-3 flex flex-col rounded-lg">
+            <textarea
+                class="flex-grow w-full bg-gray-800 text-md border border-transparent placeholder-gray-400 text-gray-400 focus:ring-0 focus:border-none resize-none"
+                type="text" id="diagram" name="diagram">Stage One -> Stage Two -> Stage Three -> Stage Four&NewLine;Stage Four -> Stage One: repeat</textarea>
+            <button onclick="GetDiagramSVG()" type="button"
+                class="text-white focus:ring-4 rounded-lg text-lg px-5 py-2.5 mr-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full">Generate (Ctrl + Enter)</button>
+        </div>
+    </div>
+
+    <div class="h-full w-2/3 p-3">
+
+        <div class="h-full w-full p-3 overflow-hidden">
+            <div id="diagram-svg" class="h-full w-full flex items-center justify-center">
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function GetDiagramSVG()
+        {
+            fetch("/api/generate", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    diagram: document.getElementById("diagram").value,
+                })
+            })
+                .then((response) => response.json())
+                .then((data) =>
+                {
+                    document.getElementById("diagram-svg").innerHTML = data.diagram;
+                    panzoom(document.getElementById("diagram-svg"));
+                });
+        }
+
+        document.getElementById("diagram").addEventListener("keydown", function (e)
+        {
+            if (e.keyCode === 13 && e.ctrlKey)
+            {
+                GetDiagramSVG();
+            }
+        });
+
+        GetDiagramSVG();
+    </script>
+
+</body>
+
+</html>
