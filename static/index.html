@@ -103,9 +103,13 @@
             }
             else if (e.keyCode === 83 && e.ctrlKey)
             {
-                event.preventDefault();
+                e.preventDefault();
                 GetDiagramSVG();
                 DownloadDiagramSVG();
+            }
+            else if (e.keyCode === 65 && e.ctrlKey)
+            {
+                document.getElementById("diagram").select();
             }
             return false;
         });
