@@ -2,7 +2,7 @@
 
 Simple playground for [diagramming scripting language D2](https://github.com/terrastruct/d2) running in Python and optionally Docker.
 
-![image](https://user-images.githubusercontent.com/23462440/204005280-42357ab8-4772-47a1-93d7-3550660f1673.png)
+![image](https://user-images.githubusercontent.com/23462440/204071887-62c9b276-444d-49b0-a2b8-5ea72cb09c88.png)
 
 ## Running in Python
 
