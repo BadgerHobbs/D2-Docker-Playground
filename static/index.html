@@ -28,6 +28,11 @@
             background: rgb(55 65 81) !important;
         }
         */
+
+        svg {
+            max-width: 100% !important;
+            max-height: 100% !important;
+        }
     </style>
 
 </head>
@@ -41,7 +46,9 @@
                 class="flex-grow w-full bg-gray-800 text-md border border-transparent placeholder-gray-400 text-gray-400 focus:ring-0 focus:border-none resize-none"
                 type="text" id="diagram" name="diagram">Stage One -> Stage Two -> Stage Three -> Stage Four&NewLine;Stage Four -> Stage One: repeat</textarea>
             <button onclick="GetDiagramSVG()" type="button"
-                class="text-white focus:ring-4 rounded-lg text-lg px-5 py-2.5 mr-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full">Generate (Ctrl + Enter)</button>
+                class="text-white focus:ring-4 rounded-lg text-md px-5 py-2.5 mr-2 mt-3 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full">Generate (Ctrl + Enter)</button>
+            <button onclick="DownloadDiagramSVG()" type="button"
+                class="text-white focus:ring-4 rounded-lg text-md px-5 py-2.5 mr-2 mt-3 bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-orange-800 w-full">Download (Ctrl + S)</button>
         </div>
     </div>
 
@@ -53,7 +60,7 @@
         </div>
     </div>
 
-    <script>
+    <script onload="GetDiagramSVG()">
 
         function GetDiagramSVG()
         {
@@ -74,15 +81,34 @@
                 });
         }
 
+        function DownloadDiagramSVG()
+        {
+            let svgData = document.getElementById("diagram-svg").innerHTML;
+            let svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
+            let svgUrl = URL.createObjectURL(svgBlob);
+            let downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = "diagram.svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+        }
+
         document.getElementById("diagram").addEventListener("keydown", function (e)
         {
             if (e.keyCode === 13 && e.ctrlKey)
             {
                 GetDiagramSVG();
             }
+            else if (e.keyCode === 83 && e.ctrlKey)
+            {
+                event.preventDefault();
+                GetDiagramSVG();
+                DownloadDiagramSVG();
+            }
+            return false;
         });
-
-        GetDiagramSVG();
     </script>
 
 </body>
